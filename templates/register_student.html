@@ -1,23 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>注册学生账户</title>
+<title>学工助理签到平台 V1.0</title>
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //for-mobile-apps -->
+<link href="/static/css/style_register.css" rel="stylesheet" type="text/css" media="all" />
 </head>
 <body>
-    <form method="post" action="register.html">
-        学号<input name="teacher_num"/><br>
-        姓名<input name="name"/><br>
-        密码<input name="password" ><br>
-        确认密码<input name="re_password" type="password"><br>
-        性别<input name="department" type="password"><br>
-        学院<input name="college"><br>
-        电话<input name="phone"><br>
-        微信<input name="weixin"><br>
-        QQ<input name="qq"><br>
-        工作地点<input name="work_location"><br>
-        工作性质<input name="work_character"><br>
-        <input type="submit" name="注册">
-    </form>
+	<!-- main -->
+		<div class="main">
+			<h1>学工助理签到平台-助理注册</h1>
+			<div class="input_form">
+				<form id="register_form" method="post" onkeypress="if(event.keyCode==13||event.which==13){ register();}">
+                    <input type="hidden" name="type" value="student"/>
+                    <input placeholder="学号" type="text" name="username"/>
+                    <input placeholder="姓名" type="text" name="name"/>
+                    <input placeholder="密码" type="password" name="password" >
+                    <input placeholder="重复密码" type="text" name="re_password" type="password">
+                    <input placeholder="学院" type="text" name="college">
+                    <input placeholder="电话" type="text" name="phone">
+                    <input placeholder="微信" type="text" name="weixin">
+                    <input placeholder="QQ" type="text" name="qq">
+                    <input placeholder="工作地点" type="text" name="work_location">
+                    <input placeholder="工作性质" type="text" name="work_character">
+				</form>
+			</div>
+
+			<div class="ckeck-bg">
+				<div class="checkbox-form">
+					<div class="check-left">
+							<input type="submit" value="注册">
+					</div>
+					<div class="check-right">
+							<input onclick="login()" type="submit" value="登录">
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+		</div>
+	<!-- //main -->
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        function register() {
+            login_form = document.getElementById('register_form');
+            login_form.submit();
+        }
+    </script>
 </body>
 </html>

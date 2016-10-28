@@ -37,22 +37,15 @@ def register(req):
             return render_to_response('register_teacher.html')
         return render_to_response('register.html', {'msg': None})
     else:
+        type = req.POST.get('type')
+        if type is None:
+            type = 'student'
+        if type == 'student':
+            username = req.POST.get('username')
+            name = req.POST.eget('name')
 
-
-        username = req.POST.get('username', None)
-        password = req.POST.get('password', None)
-        re_password = req.POST.get('re_password', None)
-        if username is None or password is None or re_password is None:
-            return render_to_response('register.html', {'msg': '参数错误'})
-        if password != re_password:
-            return render_to_response('register.html', {'msg': '两次输入的密码不一致'})
-        users = User.objects.filter(username__exact=username)
-        if len(users) > 0:
-            return render_to_response('register.html', {'msg': '用户名已经存在'})
-        user = User()
-        user.username = username
-        user.password = password
-        user.save()
+        else:
+            pass
         return render_to_response('register.html', {'script': '<script>alert("注册成功！");</script>'})
 
 def index(req):
