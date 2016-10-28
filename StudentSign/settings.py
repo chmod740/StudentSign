@@ -125,5 +125,5 @@ STATIC_URL = '/static/'
 STATIC_PATH = os.path.join(BASE_DIR, 'templates/static').replace('\\','/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    'D:\PyCharmProjects\Blog\static',
+    'D:\PyCharmProjects\StudentSign\static',
 ]
