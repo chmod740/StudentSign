@@ -79,7 +79,6 @@ def teacher(req):
     is_teacher = req.session.get('teacher')
     if is_teacher is None:
         return HttpResponseRedirect('login.html')
-    if is_teacher == False:
+    if not is_teacher:
         return HttpResponseRedirect('student.html')
-
     return render_to_response('teacher.html')
