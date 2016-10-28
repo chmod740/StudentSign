@@ -37,6 +37,8 @@ def register(req):
             return render_to_response('register_teacher.html')
         return render_to_response('register.html', {'msg': None})
     else:
+
+
         username = req.POST.get('username', None)
         password = req.POST.get('password', None)
         re_password = req.POST.get('re_password', None)

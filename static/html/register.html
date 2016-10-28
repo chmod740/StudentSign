@@ -14,18 +14,27 @@
 <body>
 	<!-- main -->
 		<div class="main">
-			<h1>学工助理签到平台 V1.0-登录</h1>
+			<h1>学工助理签到平台-助理注册</h1>
 			<div class="input_form">
-				<form id="login_form" method="post" onkeypress="if(event.keyCode==13||event.which==13){ login();}">
-					<input type="text" name="username" id="username" value="" placeholder="请输入账号" >
-					<input type="password" name="password" id="password" value="" placeholder="请输入密码" >
+				<form id="login_form" method="post" onkeypress="if(event.keyCode==13||event.which==13){ register();}">
+                    <input type="text" name="teacher_num"/>
+                    <input type="text" name="name"/>
+                    <input type="password" name="password" >
+                    <input type="text" name="re_password" type="password">
+                    <input type="text" name="department" >
+                    <input type="text" name="college">
+                    <input type="text" name="phone">
+                    <input type="text" name="weixin">
+                    <input type="text" name="qq">
+                    <input type="text" name="work_location">
+                    <input type="text" name="work_character">
 				</form>
 			</div>
 
 			<div class="ckeck-bg">
 				<div class="checkbox-form">
 					<div class="check-left">
-							<input type="submit" onclick="window.location.href='register.html'" value="注册">
+							<input type="submit" value="注册">
 					</div>
 					<div class="check-right">
 							<input onclick="login()" type="submit" value="登录">
@@ -39,15 +48,10 @@
 	<!-- //main -->
     <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
     <script>
-        function login() {
+        function register() {
             login_form = document.getElementById('login_form');
             login_form.submit();
         }
     </script>
-    {% if msg %}
-        <script>
-        alert('{{ msg }}');
-        </script>
-    {% endif %}
 </body>
 </html>
