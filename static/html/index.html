@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Rounded Flat User Login Form Flat Responsive Widget Template :: w3layouts</title>
+<title>学工助理签到平台 V1.0</title>
 <!-- for-mobile-apps -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="keywords" content="Rounded Flat User Login Form Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template, 
-Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design" />
+<meta name="keywords" content="" />
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
 		function hideURLbar(){ window.scrollTo(0,1); } </script>
 <!-- //for-mobile-apps -->
@@ -17,23 +16,19 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="main">
 			<h1>学工助理签到平台</h1>
 			<div class="input_form">
-				<form>
-					<input type="text" value="User Name" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'User Name';}" required="">
-					<input type="password" value="Password" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Password';}" required="">
+				<form id="login_form" method="post" onkeypress="if(event.keyCode==13||event.which==13){ login();}">
+					<input type="text" name="username" id="username" value="" placeholder="请输入账号" >
+					<input type="password" name="password" id="password" value="" placeholder="请输入密码" >
 				</form>
 			</div>
+
 			<div class="ckeck-bg">
 				<div class="checkbox-form">
 					<div class="check-left">
-						<form>
 							<input type="submit" value="注册">
-						</form>
-
 					</div>
 					<div class="check-right">
-						<form>
-							<input type="submit" value="登录">
-						</form>
+							<input onclick="login()" type="submit" value="登录">
 					</div>
 					<div class="clearfix"> </div>
 				</div>
@@ -42,5 +37,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<div class="footer">
 		</div>
 	<!-- //main -->
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        function login() {
+            login_form = document.getElementById('login_form');
+            login_form.submit();
+        }
+    </script>
 </body>
 </html>

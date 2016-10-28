@@ -1,17 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>登录界面</title>
+<title>学工助理签到平台 V1.0</title>
+<!-- for-mobile-apps -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="" />
+<script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false);
+		function hideURLbar(){ window.scrollTo(0,1); } </script>
+<!-- //for-mobile-apps -->
+<link href="/static/css/style_login.css" rel="stylesheet" type="text/css" media="all" />
 </head>
 <body>
-    <form method="post">
-        <input name="username"><br>
-        <input name="password" type="password"><br>
-        <input value="登录" type="submit">
-    </form>
+	<!-- main -->
+		<div class="main">
+			<h1>学工助理签到平台 V1.0</h1>
+			<div class="input_form">
+				<form id="login_form" method="post" onkeypress="if(event.keyCode==13||event.which==13){ login();}">
+					<input type="text" name="username" id="username" value="" placeholder="请输入账号" >
+					<input type="password" name="password" id="password" value="" placeholder="请输入密码" >
+				</form>
+			</div>
+
+			<div class="ckeck-bg">
+				<div class="checkbox-form">
+					<div class="check-left">
+							<input type="submit" value="注册">
+					</div>
+					<div class="check-right">
+							<input onclick="login()" type="submit" value="登录">
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+		</div>
+	<!-- //main -->
+    <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+    <script>
+        function login() {
+            login_form = document.getElementById('login_form');
+            login_form.submit();
+        }
+    </script>
     {% if msg %}
-    <p>{{ msg }}</p>
+        <script>
+        alert('{{ msg }}');
+        </script>
     {% endif %}
 </body>
 </html>
