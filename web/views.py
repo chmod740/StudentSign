@@ -28,6 +28,13 @@ def login(req):
 @csrf_exempt
 def register(req):
     if req.method == 'GET':
+        type = req.GET.get('type')
+        if type is None:
+            return render_to_response('register_student.html')
+        if type == 'student':
+            return render_to_response('register_student.html')
+        else:
+            return render_to_response('register_teacher.html')
         return render_to_response('register.html', {'msg': None})
     else:
         username = req.POST.get('username', None)

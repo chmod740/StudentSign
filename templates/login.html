@@ -10,5 +10,8 @@
         <input name="password" type="password"><br>
         <input value="登录" type="submit">
     </form>
+    {% if msg %}
+    <p>{{ msg }}</p>
+    {% endif %}
 </body>
 </html>
