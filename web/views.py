@@ -42,10 +42,36 @@ def register(req):
             type = 'student'
         if type == 'student':
             username = req.POST.get('username')
-            name = req.POST.eget('name')
+            name = req.POST.get('name')
+            password = req.POST.get('password')
+            re_password = req.POST.get('re_password')
+            college = req.POST.get('college')
+            phone = req.POST.get('phone')
+            weixin = req.POST.get('weixin')
+            qq = req.POST.get('qq')
+            work_location = req.POST.get('work_location')
+            work_character = req.POST.get('work_character')
+            if not password == re_password:
+                return render_to_response('register_student.html', {'msg': '两次输入的密码不一致'})
+            students = Student.objects.filter(stu_num__exact=username)
+            if not len(students) == 0:
+                return render_to_response('register_student.html', {'msg': '用户已经存在'})
+            if username == '' or name == '' or password == '' or college == '' or phone == '' or weixin == '' or qq == '' or work_location == '' or work_character == '':
+                return render_to_response('register_student.html', {'msg': '所有项均为必填项'})
+            student_obj = Student()
+            student_obj.username = username
+            student_obj.name = name
+            student_obj.password = password
+            student_obj.college = college
+            student_obj.phone = phone
+            student_obj.weixin = weixin
+            student_obj.qq = qq
+            student_obj.work_location = work_location
+            student_obj.work_character = work_character
+            student_obj.save()
 
         else:
-            pass
+             pass
         return render_to_response('register.html', {'script': '<script>alert("注册成功！");</script>'})
 
 def index(req):
