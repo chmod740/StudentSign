@@ -1,6 +1,7 @@
 from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from web.models import Student, Teacher, Sign
+from datetime import datetime
 
 # Create your views here.
 @csrf_exempt
@@ -59,7 +60,7 @@ def register(req):
             if username == '' or name == '' or password == '' or college == '' or phone == '' or weixin == '' or qq == '' or work_location == '' or work_character == '':
                 return render_to_response('register_student.html', {'msg': '所有项均为必填项'})
             student_obj = Student()
-            student_obj.username = username
+            student_obj.stu_num = username
             student_obj.name = name
             student_obj.password = password
             student_obj.college = college
@@ -68,10 +69,34 @@ def register(req):
             student_obj.qq = qq
             student_obj.work_location = work_location
             student_obj.work_character = work_character
+            student_obj.register_time = datetime.now()
             student_obj.save()
-
+            req.session['username'] = username
+            req.session['teacher'] = False
+            return HttpResponseRedirect('student.html')
         else:
-             pass
+            # username =
+            username = req.POST.get('username')
+            name = req.POST.get('name')
+            password = req.POST.get('password')
+            re_password = req.POST.get('re_password')
+            department = req.POST.get('department')
+            if not password == re_password:
+                return render_to_response('register_teacher.html', {'msg': '两次输入的密码不一致'})
+            teachers = Teacher.objects.filter(teacher_num__exact=username)
+            if not len(teachers) == 0:
+                return render_to_response('register_teacher.html', {'msg': '用户已经存在'})
+            if username == '' or name == '' or password == '' or department == '':
+                return render_to_response('register_teacher.html', {'msg': '所有项均为必填项'})
+            teacher_obj = Teacher()
+            teacher_obj.teacher_num = username
+            teacher_obj.name = name
+            teacher_obj.password = password
+            teacher_obj.department = department
+            teacher_obj.save()
+            req.session['username'] = username
+            req.session['teacher'] = True
+            return HttpResponseRedirect('teacher.html')
         return render_to_response('register.html', {'script': '<script>alert("注册成功！");</script>'})
 
 def index(req):
