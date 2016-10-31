@@ -31,4 +31,6 @@ class Sign(models.Model):
     sign_in_time = models.DateTimeField(auto_now=False)
     sign_off_time = models.DateTimeField(auto_now=False)
     remark = models.CharField(max_length=200, default='')
+    def __str__(self):
+        return
 
