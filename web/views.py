@@ -127,12 +127,14 @@ def student(req):
     f = datetime(2000, 1, 1, 0, 0)
     t = datetime(2000, 1, 2, 0, 0)
     signs = Sign.objects.filter(sign_off_time__range=(f, t))
+    sign = None
+    ts = sign
     if len(signs) > 0:
         sign = signs[0]
         ts = time.mktime(sign.sign_in_time.timetuple())
         ts = int(ts)
         ts = ts + 8 * 60 *60
-    return render_to_response('student.html', {'teachers': teachers, 'sign': sign, 'ts': ts, 'student':student_obj})
+    return render_to_response('student.html', {'teachers': teachers, 'sign': sign, 'ts': ts, 'student': student_obj})
 
 def teacher(req):
     is_teacher = req.session.get('teacher')
@@ -161,7 +163,7 @@ def sign_in(req):
             sign.save()
     except:
         pass
-    return HttpResponseRedirect('student.html')
+    return render_to_response('black.html', {'msg': '签到成功', 'location': 'student.html'})
 @csrf_exempt
 def sign_off(req):
     remark = req.POST.get('remark')
@@ -171,13 +173,12 @@ def sign_off(req):
         t = datetime(2000, 1, 2, 0, 0)
         signs = Sign.objects.filter(sign_off_time__range=(f, t))
         if not len(signs) == 0:
-            teacher_num = req.POST.get('teacher_num')
-            teachers = Teacher.objects.filter(teacher_num__exact=teacher_num)
-            teacher_obj = teachers[0]
+
             sign = signs[0]
             sign.sign_off_time = datetime.now()
             sign.remark = remark
             sign.save()
     except:
         pass
+    return render_to_response('black.html', {'msg': '签离成功', 'location': 'student.html'})
 

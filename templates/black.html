@@ -5,11 +5,16 @@
     <title>跳转页</title>
 </head>
 <body>
-    {% if msg %}
     <script>
+    {% if msg %}
     alert('{{ msg }}');
-    history.go(-1);
-    </script>
     {% endif %}
+    {% if go_back %}
+    history.back(-1);
+    {% endif %}
+    {% if location %}
+        window.location.href="{{ location }}";
+    {% endif %}
+    </script>
 </body>
 </html>

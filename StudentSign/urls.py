@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.views.static import serve
-from web.views import login, logout, index, register, student, teacher, sign_in
+from web.views import login, logout, index, register, student, teacher, sign_in, sign_off
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,4 +27,5 @@ urlpatterns = [
     url(r'^student.html', student),
     url(r'^teacher.html', teacher),
     url(r'^sign_in.html', sign_in),
+    url(r'^sign_off.html', sign_off),
 ]
