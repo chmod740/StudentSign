@@ -44,7 +44,7 @@ body{
 	font-size:2em;
 	margin:0 0 2em;
 }
-.input_form input[type="text"],.input_form input[type="password"]{
+.input_form input[type="text"],.input_form input[type="password"],.input_form select{
 	outline: none;
     border: 1px solid #999;
     background: none;
@@ -60,7 +60,7 @@ body{
     text-align: center;
     font-family: 'Raleway', sans-serif;
 }
-.input_form input[type="text"], .input_form input[type="password"]{
+.input_form input[type="text"], .input_form input[type="password"], .input_form select{
 	margin:1.5em 0;
 }
 .footer{
@@ -228,7 +228,7 @@ body{
 	.main h1 {
 		font-size: 1.4em;
 	}
-	.input_form input[type="text"], .input_form input[type="password"] {
+	.input_form input[type="text"], .input_form input[type="password"], .input_form select{
 		padding: 10px;
 		width: 93%;
 		font-size: 14px;
@@ -265,7 +265,7 @@ body{
 		font-size: 1.3em;
 		line-height: 1.5em;
 	}
-	.input_form input[type="text"], .input_form input[type="password"] {
+	.input_form input[type="text"], .input_form input[type="password"] ,.input_form select {
 		font-size: 13px;
 	}
 	.checkbox-form {
