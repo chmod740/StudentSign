@@ -44,6 +44,7 @@ def register(req):
         if type == 'student':
             username = req.POST.get('username')
             name = req.POST.get('name')
+            gender = req.POST.get('gender')
             password = req.POST.get('password')
             re_password = req.POST.get('re_password')
             college = req.POST.get('college')
@@ -57,11 +58,12 @@ def register(req):
             students = Student.objects.filter(stu_num__exact=username)
             if not len(students) == 0:
                 return render_to_response('register_student.html', {'msg': '用户已经存在'})
-            if username == '' or name == '' or password == '' or college == '' or phone == '' or weixin == '' or qq == '' or work_location == '' or work_character == '':
+            if gender == '' or username == '' or name == '' or password == '' or college == '' or phone == '' or weixin == '' or qq == '' or work_location == '' or work_character == '':
                 return render_to_response('register_student.html', {'msg': '所有项均为必填项'})
             student_obj = Student()
             student_obj.stu_num = username
             student_obj.name = name
+            student_obj.gender = int(gender)
             student_obj.password = password
             student_obj.college = college
             student_obj.phone = phone
