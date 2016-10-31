@@ -12,6 +12,8 @@
             padding-top: 70px;
         }
     </style>
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -40,10 +42,13 @@
     <!-- Main component for a primary marketing message or call to action -->
     <div class="jumbotron">
         <h2>本次工作时长：</h2>
-        <h2>00:00:00</h2>
+        <h2 id="div1">00:00:00</h2>
+
 
         <p>
+        {% if not sign %}
             <button class="btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#myModal1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签到&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+
         <div class="modal fade " id="myModal1" role="dialog" aria-label="myMoalLabel"
              aria-hidden="true">
             <div class="modal-dialog ">
@@ -56,18 +61,15 @@
                         <h3 class="modal-title" style="color:#000">签到</h3>
                     </div>
 
-                    <form class="form-horizontal" role="form">
+                    <form class="form-horizontal" role="form" id="choice_teacher_form" action="sign_in.html" method="post">
                         <div class="form-group form-group-lg">
                             <label for="error" class="col-lg-2 control-label">请选择负责的教工</label>
 
                             <div class="col-lg-10 error">
-                                <select id="error" class="selectpicker show-tick form-control">
+                                <select id="error" class="selectpicker show-tick form-control" name="teacher_num">
                                     {% for teacher in teachers %}
                                         <option value="{{ teacher.teacher_num }}">{{ teacher.name }}</option>
                                     {% endfor %}
-
-
-
                                 </select>
                             </div>
                         </div>
@@ -78,14 +80,15 @@
                         <button type="button" class="btn btn-default"
                                 data-dismiss="modal">关闭
                         </button>
-                        <button type="button" id="button" class="btn btn-primary  post-change-notice">签到</button>
+                        <button type="button" id="button" class="btn btn-primary  post-change-notice" onclick="sign_in()">签到</button>
                     </div>
 
                 </div>
+
             </div>
         </div>
-
-
+        {% endif %}
+        {% if sign %}
         <button class="btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#myModal2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签离&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
         <div class="modal fade bs-example-modal-lg" id="myModal2" role="dialog" aria-label="myMoalLabel"
              aria-hidden="true">
@@ -118,9 +121,10 @@
                     </div>
 
                 </div>
+
             </div>
         </div>
-
+        {% endif %}
 
         </p>
 
@@ -151,9 +155,68 @@
     </table>
 </div>
 </body>
-<script src="/static/js/jquery.js"></script>
-<script src="/static/js/bootstrap.min.js"></script>
+
 <script>
+    function sign_in() {
+        var choice_teacher_form = document.getElementById('choice_teacher_form');
+        choice_teacher_form.submit();
+    }
 
 </script>
+<script>
+	window.onload = function() {
+		//定时器每秒调用一次fnDate()
+		setInterval(function() {
+			fnDate();
+		}, 1000);
+		setTimeout('myrefresh()',60000); //指定1秒刷新一次
+	}
+	function myrefresh()
+	{
+       window.location.reload();
+	}
+
+	//js 获取当前时间
+	function fnDate() {
+        var start_time = {{ ts }};
+        var end_time = Date.parse(new Date())/1000;
+		var between = end_time - start_time;
+        between = parseInt(between);
+        var oDiv = document.getElementById("div1");
+		var second = between % 60;
+        between = between / 60;
+        between = parseInt(between);
+        var minite = between % 60;
+        between = between / 60;
+        between = parseInt(between);
+        var hour = between;
+        var time = '';
+		if (hour < 10){
+            time = '0' + hour + ':';
+        }
+        else{
+            time = hour + ':';
+        }
+        if (minite < 10){
+            time = time + '0' + minite + ':';
+        }
+        else{
+            time = time + minite + ':';
+        }
+        if (second < 10){
+            time = time + '0' + second;
+        }
+        else{
+            time = time + second;
+        }
+		oDiv.innerHTML = time;
+	}
+	//补位 当某个字段不是两位数时补0
+	function fnW(str) {
+		var num;
+		str >= 10 ? num = str : num = "0" + str;
+		return num;
+	}
+</script>
+
 </html>

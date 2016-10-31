@@ -29,8 +29,9 @@ class Sign(models.Model):
     student = models.ForeignKey(Student)
     teacher = models.ForeignKey(Teacher)
     sign_in_time = models.DateTimeField(auto_now=False)
-    sign_off_time = models.DateTimeField(auto_now=False)
+    sign_off_time = models.DateTimeField(auto_now=False, null=True, blank=True)
     remark = models.CharField(max_length=200, default='')
+
     def __str__(self):
-        return
+        return '助理名字:' + self.student.name + ' 教工名字:' + self.teacher.name + ' 签到时间:' + str(self.sign_in_time)
 
