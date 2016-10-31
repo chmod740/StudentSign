@@ -121,7 +121,9 @@ def student(req):
     if is_teacher:
         return HttpResponseRedirect('teacher.html')
 
-    return render_to_response('student.html')
+    teachers = Teacher.objects.all()
+
+    return render_to_response('student.html', {'teachers': teachers})
 
 def teacher(req):
     is_teacher = req.session.get('teacher')
