@@ -3,7 +3,8 @@ from django.views.decorators.csrf import csrf_exempt
 from web.models import Student, Teacher, Sign
 from datetime import datetime
 import time
-
+import os
+import platform
 
 # Create your views here.
 @csrf_exempt
@@ -117,6 +118,10 @@ def logout(req):
     return HttpResponseRedirect('login.html')
 
 def student(req):
+    page = req.GET.get('page')
+    if page is None:
+        page = 0
+    page = int(page)
     is_teacher = req.session.get('teacher')
     student_obj = Student.objects.get(stu_num__exact=req.session.get('username'))
     if is_teacher is None:
@@ -129,12 +134,20 @@ def student(req):
     signs = Sign.objects.filter(sign_off_time__range=(f, t))
     sign = None
     ts = sign
+
     if len(signs) > 0:
         sign = signs[0]
         ts = time.mktime(sign.sign_in_time.timetuple())
         ts = int(ts)
-        ts = ts + 8 * 60 *60
-    return render_to_response('student.html', {'teachers': teachers, 'sign': sign, 'ts': ts, 'student': student_obj})
+        sysstr = platform.system()
+        if (sysstr == "Windows"):
+            ts = ts + 8 * 60 * 60
+    page_size = 10
+    signs = Sign.objects.order_by('-id').filter(student__exact=student_obj)[page*page_size: page*page_size + page_size]
+    sign_size = len(Sign.objects.all())
+    page_range = int((sign_size + page_size - 1)/page_size)
+
+    return render_to_response('student.html', {'teachers': teachers, 'sign': sign, 'ts': ts, 'student': student_obj, 'page': page, 'page_range': range(page_range), 'page_end': page_range-1})
 
 def teacher(req):
     is_teacher = req.session.get('teacher')

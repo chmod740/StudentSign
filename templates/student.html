@@ -151,7 +151,23 @@
             <td>工作记录</td>
         </tr>
     </table>
+    <nav>
+        <ul class="pagination">
+            <li {% if not page %}class="disabled"{% endif %}><a href="#">&laquo;</a></li>
+            {% for p in page_range %}
+{#            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>#}
+            <li><a href="student.html?page={{ p }}">{{ p|add:1 }}</a></li>
+{#            <li><a href="#">3</a></li>#}
+{#            <li><a href="#">4</a></li>#}
+{#            <li><a href="#">5</a></li>#}
+
+            {% endfor %}
+            <li {% ifequal page page_end %}class="disabled"{% endifequal %}><a href="#">&raquo;</a></li>
+        </ul>
+    </nav>
 </div>
+
+
 </body>
 
 <script>
