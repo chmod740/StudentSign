@@ -1,7 +1,7 @@
 from django.shortcuts import render_to_response, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from web.models import Student, Teacher, Sign
-from datetime import datetime
+from datetime import datetime, timedelta
 import time
 import os
 import platform
@@ -116,9 +116,10 @@ def index(req):
 def logout(req):
     req.session.clear()
     return HttpResponseRedirect('login.html')
-
+@csrf_exempt
 def student(req):
     page = req.GET.get('page')
+    date = req.POST.get('date')
     if page is None:
         page = 0
     page = int(page)
@@ -142,12 +143,19 @@ def student(req):
         sysstr = platform.system()
         if (sysstr == "Windows"):
             ts = ts + 8 * 60 * 60
-    page_size = 10
-    f = datetime(2001, 1, 1, 0, 0, 26, 423063)
-    t = datetime.now()
-    signs = Sign.objects.order_by('-id').filter(student__exact=student_obj, sign_off_time__range=(f, t))[page*page_size: page*page_size + page_size]
-    sign_size = len(Sign.objects.all())
-    page_range = int((sign_size + page_size - 1)/page_size)
+    if date is None or date == '':
+        page_size = 10
+        f = datetime(2001, 1, 1, 0, 0, 26, 423063)
+        t = datetime.now()
+        signs = Sign.objects.order_by('-id').filter(student__exact=student_obj, sign_off_time__range=(f, t))[page*page_size: page*page_size + page_size]
+        sign_size = len(Sign.objects.all())
+        page_range = int((sign_size + page_size - 1)/page_size)
+    else:
+        d1 = datetime.strptime(date, "%Y年%m月%d日")
+        d2 = d1 + timedelta(days=1)
+        page_range = 1
+        signs = Sign.objects.filter(student__exact=student_obj, sign_off_time__range=(d1, d2))
+        page = 0
 
     return render_to_response('student.html', {'teachers': teachers, 'sign': sign, 'ts': ts, 'student': student_obj, 'page': page, 'page_range': range(page_range), 'page_end': page_range-1, 'signs':signs})
 
@@ -188,7 +196,6 @@ def sign_off(req):
         t = datetime(2000, 1, 2, 0, 0)
         signs = Sign.objects.filter(sign_off_time__range=(f, t))
         if not len(signs) == 0:
-
             sign = signs[0]
             sign.sign_off_time = datetime.now()
             sign.remark = remark
