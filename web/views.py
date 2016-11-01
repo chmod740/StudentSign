@@ -143,11 +143,13 @@ def student(req):
         if (sysstr == "Windows"):
             ts = ts + 8 * 60 * 60
     page_size = 10
-    signs = Sign.objects.order_by('-id').filter(student__exact=student_obj)[page*page_size: page*page_size + page_size]
+    f = datetime(2001, 1, 1, 0, 0, 26, 423063)
+    t = datetime.now()
+    signs = Sign.objects.order_by('-id').filter(student__exact=student_obj, sign_off_time__range=(f, t))[page*page_size: page*page_size + page_size]
     sign_size = len(Sign.objects.all())
     page_range = int((sign_size + page_size - 1)/page_size)
 
-    return render_to_response('student.html', {'teachers': teachers, 'sign': sign, 'ts': ts, 'student': student_obj, 'page': page, 'page_range': range(page_range), 'page_end': page_range-1})
+    return render_to_response('student.html', {'teachers': teachers, 'sign': sign, 'ts': ts, 'student': student_obj, 'page': page, 'page_range': range(page_range), 'page_end': page_range-1, 'signs':signs})
 
 def teacher(req):
     is_teacher = req.session.get('teacher')

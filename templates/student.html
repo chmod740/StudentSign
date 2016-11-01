@@ -14,6 +14,7 @@
     </style>
     <script src="/static/js/jquery.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/jedate/jedate.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -128,28 +129,35 @@
 
     </div>
 </div>
+<p class="datep"><input class="datainp" id="dateinfo" type="text" placeholder="请选择日期"  readonly></p>
 <div class="container" class="table-responsive">
     <table class="table table-striped table-bordered">
         <tr>
-            <td>姓名</td>
-            <td>学号</td>
+            <td>签到时间</td>
+            <td>签离时间</td>
             <td>工作记录</td>
+            <td>所属教工</td>
+            <td>审核状态</td>
         </tr>
+        {% for foo in signs %}
         <tr>
-            <td>姓名</td>
-            <td>学号</td>
-            <td>工作记录</td>
+            <td>{{ foo.sign_in_time|date:"Y-m-d H:i:s"  }}</td>
+            <td>{{ foo.sign_off_time|date:"Y-m-d H:i:s"  }}</td>
+            <td>{{ foo.remark }}</td>
+            <td>{{ foo.teacher.name }}</td>
+            {% ifequal foo.audit 1 %}
+            <td>审核通过</td>
+            {% endifequal %}
+            {% ifequal foo.audit 0 %}
+            <td>未审核</td>
+            {% endifequal %}
+            {% ifequal foo.audit 2 %}
+            <td>审核不通过</td>
+            {% endifequal %}
+
         </tr>
-        <tr>
-            <td>姓名</td>
-            <td>学号</td>
-            <td>工作记录</td>
-        </tr>
-        <tr>
-            <td>姓名</td>
-            <td>学号</td>
-            <td>工作记录</td>
-        </tr>
+        {% endfor %}
+
     </table>
     <nav>
         <ul class="pagination">
@@ -237,4 +245,16 @@
 	}
 </script>
 {% endif %}
+<script>
+
+    jeDate({
+		dateCell:"#dateinfo",
+		format:"YYYY年MM月DD日",
+		isinitVal:true,
+		isTime:true, //isClear:false,
+		minDate:"2014-09-19 00:00:00",
+		okfun:function(val){alert(val)}
+	})
+
+</script>
 </html>

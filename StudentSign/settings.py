@@ -116,13 +116,14 @@ USE_L10N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 STATIC_URL = '/static/'
-STATIC_PATH = os.path.join(BASE_DIR, 'templates/static').replace('\\','/')
+STATIC_PATH = os.path.join(BASE_DIR, 'templates/static').replace('\\', '/')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     'D:\PyCharmProjects\StudentSign\static',
