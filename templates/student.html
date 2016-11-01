@@ -12,9 +12,10 @@
             padding-top: 70px;
         }
     </style>
+
     <script src="/static/js/jquery.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
-
+{#    <script src="/static/js/datetime.js"></script>#}
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -31,7 +32,7 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="">您好！胡鹏</a></li>
+                <li><a href="">您好！{{ student.name }}</a></li>
                 <li><a href="login.html">退出</a></li>
             </ul>
         </div><!--/.nav-collapse -->
@@ -47,7 +48,7 @@
 
 
         <p>
-
+        {% if not sign %}
             <button class="btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#myModal1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签到&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
 
         <div class="modal fade " id="myModal1" role="dialog" aria-label="myMoalLabel"
@@ -63,14 +64,14 @@
                     </div>
 
                     <form class="form-horizontal" role="form" id="choice_teacher_form" action="sign_in.html" method="post">
-                        <div class="form-group form-group-lg" style="margin-top: 15px;">
+                        <div class="form-group form-group-lg">
                             <label for="error" class="col-lg-2 control-label">请选择负责的教工</label>
 
-                            <div class="col-lg-9 error">
+                            <div class="col-lg-10 error">
                                 <select id="error" class="selectpicker show-tick form-control" name="teacher_num">
-
-                                        <option value="007">詹姆斯.邦德</option>
-
+                                    {% for teacher in teachers %}
+                                        <option value="{{ teacher.teacher_num }}">{{ teacher.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -88,15 +89,63 @@
 
             </div>
         </div>
+        {% endif %}
+        {% if sign %}
+        <button class="btn btn-primary btn-lg" type="button" data-toggle="modal" data-target="#myModal2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;签离&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <div class="modal fade bs-example-modal-lg" id="myModal2" role="dialog" aria-label="myMoalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
 
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title" style="color:#000">签离</h3>
+                    </div>
 
+                    <div class="modal-body">
+                        <form role="form" id="sign_off_form" action="sign_off.html" method="post">
+                          <div class="form-group">
+                            <textarea name="remark" class="form-control" rows="3"></textarea>
+                          </div>
+                        </form>
+
+                    </div>
+
+                    <div class="modal-footer" ng-controller="car">
+                        <button type="button" class="btn btn-default"
+                                data-dismiss="modal">关闭
+                        </button>
+                        <button type="button" id="button" class="btn btn-primary post-change-notice" onclick="sign_off()">签离</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        {% endif %}
 
         </p>
 
     </div>
+
 </div>
 
+
 <div class="container" class="table-responsive">
+    <div class="col-lg-6">
+        选择指定日期：
+        <div class="input-group">
+            <form method="post" id="date_form">
+                <input   name='date' id="dateinfo" type="text" class="form-control sang_Calender">
+            </form>
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="button" onclick="data_picked()">查询指定日期</button>
+                <button class="btn btn-default" type="button" onclick="show_all()">显示全部记录</button>
+            </span>
+        </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
     <table class="table table-striped table-bordered">
         <tr>
             <td>签到时间</td>
@@ -105,158 +154,38 @@
             <td>所属教工</td>
             <td>审核状态</td>
         </tr>
-
+        {% for foo in signs %}
         <tr>
-            <td>2016-11-01 19:41:40</td>
-            <td>2016-11-01 20:09:27</td>
-            <td>666</td>
-            <td>詹姆斯.邦德</td>
-
-
+            <td>{{ foo.sign_in_time|date:"Y-m-d H:i:s"  }}</td>
+            <td>{{ foo.sign_off_time|date:"Y-m-d H:i:s"  }}</td>
+            <td>{{ foo.remark }}</td>
+            <td>{{ foo.teacher.name }}</td>
+            {% ifequal foo.audit 1 %}
+            <td>审核通过</td>
+            {% endifequal %}
+            {% ifequal foo.audit 0 %}
             <td>未审核</td>
-
-
+            {% endifequal %}
+            {% ifequal foo.audit 2 %}
+            <td>审核不通过</td>
+            {% endifequal %}
 
         </tr>
-
-        <tr>
-            <td>2016-11-01 19:41:17</td>
-            <td>2016-11-01 19:41:28</td>
-            <td></td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
-        <tr>
-            <td>2016-11-01 19:30:44</td>
-            <td>2016-11-01 19:30:54</td>
-            <td></td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
-        <tr>
-            <td>2016-11-01 19:10:26</td>
-            <td>2016-11-01 19:10:31</td>
-            <td>666</td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
-        <tr>
-            <td>2016-11-01 19:10:07</td>
-            <td>2016-11-01 19:10:17</td>
-            <td>111111</td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
-        <tr>
-            <td>2016-11-01 19:09:58</td>
-            <td>2016-11-01 19:10:03</td>
-            <td>ggg</td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
-        <tr>
-            <td>2016-11-01 19:09:37</td>
-            <td>2016-11-01 19:09:41</td>
-            <td>12123122431242314</td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
-        <tr>
-            <td>2016-11-01 19:09:27</td>
-            <td>2016-11-01 19:09:32</td>
-            <td>eee</td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
-        <tr>
-            <td>2016-11-01 19:07:03</td>
-            <td>2016-11-01 19:09:20</td>
-            <td>1111</td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
-        <tr>
-            <td>2016-11-01 17:47:15</td>
-            <td>2016-11-01 19:07:00</td>
-            <td></td>
-            <td>詹姆斯.邦德</td>
-
-
-            <td>未审核</td>
-
-
-
-        </tr>
-
+        {% endfor %}
 
     </table>
     <nav>
         <ul class="pagination">
-            <li class="disabled"><a href="student.html?page=-1">&laquo;</a></li>
+            <li {% if not page %}class="disabled"{% endif %}><a href="student.html?page={{ page|add:-1 }}">&laquo;</a></li>
+            {% for p in page_range %}
+{#            <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>#}
+            <li {% ifequal p page %}class="active"{% endifequal %}><a href="student.html?page={{ p }}">{{ p|add:1 }}</a></li>
+{#            <li><a href="#">3</a></li>#}
+{#            <li><a href="#">4</a></li>#}
+{#            <li><a href="#">5</a></li>#}
 
-
-            <li class="active"><a href="student.html?page=0">1</a></li>
-
-
-
-
-
-
-            <li ><a href="student.html?page=1">2</a></li>
-
-
-
-
-
-            <li ><a href="student.html?page=1">&raquo;</a></li>
+            {% endfor %}
+            <li {% ifequal page page_end %}class="disabled"{% endifequal %}><a href="student.html?page={{ page|add:1 }}">&raquo;</a></li>
         </ul>
     </nav>
 </div>
@@ -274,6 +203,81 @@
         sign_off_form.submit();
     }
 </script>
+{% if sign %}
+<script>
+	window.onload = function() {
+		//定时器每秒调用一次fnDate()
+		setInterval(function() {
+			fnDate();
+		}, 1000);
+{#		setTimeout('myrefresh()',60000); //指定1秒刷新一次#}
+	}
+	function myrefresh()
+	{
+       window.location.reload();
+	}
 
-
+	//js 获取当前时间
+	function fnDate() {
+        var start_time = {{ ts }};
+        var end_time = Date.parse(new Date())/1000;
+		var between = end_time - start_time;
+        between = parseInt(between);
+        var oDiv = document.getElementById("div1");
+		var second = between % 60;
+        between = between / 60;
+        between = parseInt(between);
+        var minite = between % 60;
+        between = between / 60;
+        between = parseInt(between);
+        var hour = between;
+        var time = '';
+		if (hour < 10){
+            time = '0' + hour + ':';
+        }
+        else{
+            time = hour + ':';
+        }
+        if (minite < 10){
+            time = time + '0' + minite + ':';
+        }
+        else{
+            time = time + minite + ':';
+        }
+        if (second < 10){
+            time = time + '0' + second;
+        }
+        else{
+            time = time + second;
+        }
+		oDiv.innerHTML = time;
+	}
+	//补位 当某个字段不是两位数时补0
+	function fnW(str) {
+		var num;
+		str >= 10 ? num = str : num = "0" + str;
+		return num;
+	}
+</script>
+{% endif %}
+<script src="/static/jedate/jedate.js"></script>
+<script>
+    jeDate({
+		dateCell:"#dateinfo",
+		format:"YYYY年MM月DD日",
+		isinitVal:false,
+		isTime:false, //isClear:false,
+		minDate:"2014-09-19 00:00:00",
+		okfun:function(val){}
+	})
+</script>
+<script>
+    function data_picked() {
+        var date_form = document.getElementById('date_form');
+        date_form.submit();
+    }
+    function show_all() {
+        window.location.href="student.html";
+    }
+</script>
 </html>
