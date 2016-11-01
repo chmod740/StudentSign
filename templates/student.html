@@ -63,10 +63,10 @@
                     </div>
 
                     <form class="form-horizontal" role="form" id="choice_teacher_form" action="sign_in.html" method="post">
-                        <div class="form-group form-group-lg">
+                        <div class="form-group form-group-lg" style="margin-top: 15px;">
                             <label for="error" class="col-lg-2 control-label">请选择负责的教工</label>
 
-                            <div class="col-lg-10 error">
+                            <div class="col-lg-9 error">
                                 <select id="error" class="selectpicker show-tick form-control" name="teacher_num">
                                     {% for teacher in teachers %}
                                         <option value="{{ teacher.teacher_num }}">{{ teacher.name }}</option>
