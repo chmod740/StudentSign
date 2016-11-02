@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^sign_in.html', sign_in),
     url(r'^sign_off.html', sign_off),
     url('^$', index),
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': '/home/ubuntu/py-web/StudentSign/static'})
 ]
