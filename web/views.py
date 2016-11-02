@@ -3,8 +3,9 @@ from django.views.decorators.csrf import csrf_exempt
 from web.models import Student, Teacher, Sign
 from datetime import datetime, timedelta
 import time
-import os
+from web.tool import get_my_sign, get_format_time
 import platform
+
 
 # Create your views here.
 @csrf_exempt
@@ -29,6 +30,8 @@ def login(req):
                 return HttpResponseRedirect('index.html')
             else:
                 return render_to_response('login.html', {'msg': '用户名或者密码错误'})
+
+
 @csrf_exempt
 def register(req):
     if req.method == 'GET':
@@ -104,6 +107,7 @@ def register(req):
             return HttpResponseRedirect('teacher.html')
         return render_to_response('register.html', {'script': '<script>alert("注册成功！");</script>'})
 
+
 def index(req):
     isTeacher = req.session.get('teacher')
     if isTeacher is None:
@@ -113,9 +117,12 @@ def index(req):
     else:
         return HttpResponseRedirect('student.html')
 
+
 def logout(req):
     req.session.clear()
     return HttpResponseRedirect('login.html')
+
+
 @csrf_exempt
 def student(req):
     page = req.GET.get('page')
@@ -125,10 +132,8 @@ def student(req):
     page = int(page)
     is_teacher = req.session.get('teacher')
     student_obj = Student.objects.get(stu_num__exact=req.session.get('username'))
-    if is_teacher is None:
-        return HttpResponseRedirect('login.html')
-    if is_teacher:
-        return HttpResponseRedirect('teacher.html')
+    if is_teacher is None or is_teacher:
+        return render_to_response('black.html', {'msg': '请登录', 'location': 'login.html'})
     teachers = Teacher.objects.all()
     f = datetime(2000, 1, 1, 0, 0)
     t = datetime(2000, 1, 2, 0, 0)
@@ -147,25 +152,82 @@ def student(req):
         page_size = 10
         f = datetime(2001, 1, 1, 0, 0, 26, 423063)
         t = datetime.now()
-        signs = Sign.objects.order_by('-id').filter(student__exact=student_obj, sign_off_time__range=(f, t))[page*page_size: page*page_size + page_size]
+        signs = Sign.objects.order_by('-id').filter(student__exact=student_obj, sign_off_time__range=(f, t))[
+                page * page_size: page * page_size + page_size]
         sign_size = len(Sign.objects.all())
-        page_range = int((sign_size + page_size - 1)/page_size)
+        page_range = int((sign_size + page_size - 1) / page_size)
     else:
-        d1 = datetime.strptime(date, "%Y年%m月%d日")
+        d1 = datetime.strptime(date, "%Y-%m-%d")
         d2 = d1 + timedelta(days=1)
         page_range = 1
         signs = Sign.objects.filter(student__exact=student_obj, sign_off_time__range=(d1, d2))
         page = 0
 
-    return render_to_response('student.html', {'teachers': teachers, 'sign': sign, 'ts': ts, 'student': student_obj, 'page': page, 'page_range': range(page_range), 'page_end': page_range-1, 'signs':signs})
+    return render_to_response('student.html',
+                              {'teachers': teachers, 'sign': sign, 'ts': ts, 'student': student_obj, 'page': page,
+                               'page_range': range(page_range), 'page_end': page_range - 1, 'signs': signs})
 
+
+@csrf_exempt
 def teacher(req):
     is_teacher = req.session.get('teacher')
-    if is_teacher is None:
-        return HttpResponseRedirect('login.html')
-    if not is_teacher:
-        return HttpResponseRedirect('student.html')
-    return render_to_response('teacher.html')
+    if is_teacher is None or not is_teacher:
+        return render_to_response('black.html', {'msg': '请登录', 'location': 'login.html'})
+    stu_num = req.GET.get('stu_num')
+    date = req.POST.get('date')
+    stu_num = req.POST.get('stu_num')
+    action = req.GET.get('action')
+    if action is not None:
+        id = req.GET.get('id')
+        if action == 'audit_success':
+            try:
+                sign = Sign.objects.get(id__exact=id)
+                sign.audit = 1
+                sign.save()
+            except:
+                pass
+        if action == 'audit_fail':
+            try:
+                sign = Sign.objects.get(id__exact=id)
+                sign.audit = 2
+                sign.save()
+            except:
+                pass
+        return render_to_response('black.html', {'msg': '审核完成', 'location': 'teacher.html'})
+    teacher_obj = Teacher.objects.get(teacher_num__exact=req.session.get('username'))
+    if (stu_num is None or stu_num == '') and (date is None or date == ''):
+        signs = Sign.objects.order_by('-id').filter(teacher__exact=teacher_obj)
+        my_signs = get_my_sign(signs)
+
+    if stu_num is not None and not stu_num == '':
+        signs = Sign.objects.order_by('-id').filter(teacher__teacher_num__exact=req.session.get('username'),
+                                                    student__stu_num__exact=stu_num)
+        my_signs = get_my_sign(signs)
+    if date is not None and not date == '':
+        d1 = datetime.strptime(date, "%Y-%m-%d")
+        d2 = d1 + timedelta(days=1)
+        signs = Sign.objects.filter(teacher__teacher_num__exact=req.session.get('username'),
+                                    sign_in_time__range=(d1, d2))
+        my_signs = get_my_sign(signs)
+    for my_sign in my_signs:
+        ts_start = time.mktime(my_sign.sign_in_time.timetuple())
+
+        sysstr = platform.system()
+
+        ts_end = time.mktime(my_sign.sign_off_time.timetuple())
+
+        if ts_end < ts_start:
+            ts_end = time.mktime(datetime.now().timetuple())
+        else:
+            if sysstr == "Windows":
+                ts_end = ts_end + 8 * 60 * 60
+        if sysstr == "Windows":
+            ts_start = ts_start + 8 * 60 * 60
+
+        ts_diff = ts_end - ts_start
+        my_sign.time_diff = get_format_time(ts_diff)
+    return render_to_response('teacher.html', {'teacher': teacher_obj, 'signs': my_signs})
+
 
 @csrf_exempt
 def sign_in(req):
@@ -173,7 +235,7 @@ def sign_in(req):
         student_obj = Student.objects.get(stu_num__exact=req.session.get('username'))
         f = datetime(2000, 1, 1, 0, 0)
         t = datetime(2000, 1, 2, 0, 0)
-        signs = Sign.objects.filter(sign_off_time__range=(f,t))
+        signs = Sign.objects.filter(sign_off_time__range=(f, t))
         if len(signs) == 0:
             teacher_num = req.POST.get('teacher_num')
             teachers = Teacher.objects.filter(teacher_num__exact=teacher_num)
@@ -187,6 +249,8 @@ def sign_in(req):
     except:
         pass
     return render_to_response('black.html', {'msg': '签到成功', 'location': 'student.html'})
+
+
 @csrf_exempt
 def sign_off(req):
     remark = req.POST.get('remark')
@@ -203,4 +267,3 @@ def sign_off(req):
     except:
         pass
     return render_to_response('black.html', {'msg': '签离成功', 'location': 'student.html'})
-

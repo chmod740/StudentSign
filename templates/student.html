@@ -1,3 +1,30 @@
+<!-- author:hupeng -->
+<!-- email:hupeng AT imudges DOT com -->
+<!--//                                                                          -->
+<!--//                                  _oo8oo_                                 -->
+<!--//                                 o8888888o                                -->
+<!--//                                 88" . "88                                -->
+<!--//                                 (| -_- |)                                -->
+<!--//                                 0\  =  /0                                -->
+<!--//                               ___/'==='\___                              -->
+<!--//                             .' \\|     |// '.                            -->
+<!--//                            / \\|||  :  |||// \                           -->
+<!--//                           / _||||| -:- |||||_ \                          -->
+<!--//                          |   | \\\  -  /// |   |                         -->
+<!--//                          | \_|  ''\-&#45;&#45;/''  |_/ |                 -->
+<!--//                          \  .-\__  '-'  __/-.  /                         -->
+<!--//                        ___'. .'  /&#45;&#45;.&#45;&#45;\  '. .'___       -->
+<!--//                     ."" '<  '.___\_<|>_/___.'  >' "".                    -->
+<!--//                    | | :  `- \`.:`\ _ /`:.`/ -`  : | |                   -->
+<!--//                    \  \ `-.   \_ __\ /__ _/   .-` /  /                   -->
+<!--//                =====`-.____`.___ \_____/ ___.`____.-`=====               -->
+<!--//                                  `=-&#45;&#45;=`                         -->
+<!--//                                                                          -->
+<!--//                                                                          -->
+<!--//               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~               -->
+<!--//                                                                          -->
+<!--//                          佛祖保佑         永不宕机/永无bug               -->
+<!--//                                                                          -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,7 +42,7 @@
 
     <script src="/static/js/jquery.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
-{#    <script src="/static/js/datetime.js"></script>#}
+    <script src="/static/DatePicker/WdatePicker.js"></script>
 </head>
 <body>
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -33,7 +60,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="">您好！{{ student.name }}</a></li>
-                <li><a href="login.html">退出</a></li>
+                <li><a href="logout.html">退出</a></li>
             </ul>
         </div><!--/.nav-collapse -->
     </div>
@@ -138,7 +165,7 @@
         选择指定日期：
         <div class="input-group">
             <form method="post" id="date_form">
-                <input   name='date' id="dateinfo" type="text" class="form-control sang_Calender">
+                <input  name='date' id="dateinfo" type="text" class="form-control" onClick="WdatePicker()">
             </form>
             <span class="input-group-btn">
                 <button class="btn btn-default" type="button" onclick="data_picked()">查询指定日期</button>
@@ -210,7 +237,7 @@
 		setInterval(function() {
 			fnDate();
 		}, 1000);
-{#		setTimeout('myrefresh()',60000); //指定1秒刷新一次#}
+
 	}
 	function myrefresh()
 	{
@@ -260,17 +287,17 @@
 	}
 </script>
 {% endif %}
-<script src="/static/jedate/jedate.js"></script>
-<script>
-    jeDate({
-		dateCell:"#dateinfo",
-		format:"YYYY年MM月DD日",
-		isinitVal:false,
-		isTime:false, //isClear:false,
-		minDate:"2014-09-19 00:00:00",
-		okfun:function(val){}
-	})
-</script>
+{#<script src="/static/jedate/jedate.js"></script>#}
+{#<script>#}
+{#    jeDate({#}
+{#		dateCell:"#dateinfo",#}
+{#		format:"YYYY年MM月DD日",#}
+{#		isinitVal:false,#}
+{#		isTime:false, //isClear:false,#}
+{#		minDate:"2014-09-19 00:00:00",#}
+{#		okfun:function(val){}#}
+{#	})#}
+{#</script>#}
 <script>
     function data_picked() {
         var date_form = document.getElementById('date_form');
