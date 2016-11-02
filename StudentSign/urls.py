@@ -28,5 +28,4 @@ urlpatterns = [
     url(r'^teacher.html', teacher),
     url(r'^sign_in.html', sign_in),
     url(r'^sign_off.html', sign_off),
-    url('^$', index),
 ]
