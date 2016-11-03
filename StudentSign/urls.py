@@ -31,5 +31,5 @@ urlpatterns = [
     url(r'^$', index),
     url(r'^change_student_info.html', change_student_info),
     url(r'^change_teacher_info.html', change_teacher_info),
-    url(r'^static/(?P<path>.*)$', serve, {'document_root': '/home/ubuntu/py-web/StudentSign/static'})
+    url(r'^static/(?P<path>.*)$', serve, {'document_root': '/home/hupeng/py-web/StudentSign/static'})
 ]
