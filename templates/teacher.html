@@ -110,7 +110,41 @@
         </tr>
         {% for sign in signs %}
             <tr>
-                <td>{{ sign.student.stu_num }}</td>
+                <td><a href="" data-toggle="modal" data-target="#Modal{{ sign.id }}">{{ sign.student.stu_num }}</a></td>
+                <div class="modal fade bs-example-modal-lg" id="Modal{{ sign.id }}" role="dialog" aria-label="myMoalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog ">
+
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h3 class="modal-title" style="color:#000">学工助理个人信息</h3>
+                            </div>
+
+                            <div class="modal-body">
+                                <p>学号：{{ sign.student.stu_num }}</p>
+                                <p>姓名：{{ sign.student.name }}</p>
+                                <p>性别：{% ifequal sign.student.gender 1 %}男{% endifequal %}{% ifequal sign.student.gender 2 %}女{% endifequal %}</p>
+                                <p>学院：{{ sign.student.college }}</p>
+                                <p>电话：{{ sign.student.phone }}</p>
+                                <p>微信：{{ sign.student.weixin }}</p>
+                                <p>QQ：{{ sign.student.qq }}</p>
+                                <p>工作地点：{{ sign.student.work_location }}</p>
+                                <p>工作性质：{{ sign.student.work_character }}</p>
+                            </div>
+
+                            <div class="modal-footer" ng-controller="car">
+                                <button type="button" class="btn btn-primary"
+                                        data-dismiss="modal">关闭
+                                </button>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
                 <td>{{ sign.student.name }}</td>
                 <td>{{ sign.sign_in_time|date:"Y-m-d H:i:s" }}</td>
                 <td>{% if sign.sign_in_time < sign.sign_off_time %}{{ sign.sign_off_time|date:"Y-m-d H:i:s" }}{% else %}
@@ -148,7 +182,9 @@
                 </div>
 
                 <td>
-                    <button onclick="audit_confirm({{ sign.id }})" class="btn btn-primary %}">{% ifequal sign.audit 0 %} 未审核 {% endifequal %}{% ifequal sign.audit 1 %} 审核通过 {% endifequal %}{% ifequal sign.audit 2 %} 审核不通过 {% endifequal %}</button>
+                    <button onclick="audit_confirm({{ sign.id }})" class="btn btn-primary %}">{% ifequal sign.audit 0 %}
+                        未审核 {% endifequal %}{% ifequal sign.audit 1 %} 审核通过 {% endifequal %}{% ifequal sign.audit 2 %}
+                        审核不通过 {% endifequal %}</button>
                 </td>
             </tr>
         {% endfor %}
@@ -169,9 +205,9 @@
         date_form.submit();
     }
     function audit_confirm(id) {
-        if(window.confirm('请选择是否通过审核？\n确定：通过审核，取消：审核不通过')){
+        if (window.confirm('请选择是否通过审核？\n确定：通过审核，取消：审核不通过')) {
             window.location.href = "teacher.html?action=audit_success&id=" + id;
-        }else{
+        } else {
             window.location.href = "teacher.html?action=audit_fail&id=" + id;
         }
     }
