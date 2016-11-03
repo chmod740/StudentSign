@@ -45,15 +45,21 @@
 			<div class="input_form">
 				<form id="register_form" method="post" onkeypress="if(event.keyCode==13||event.which==13){ register();}">
                     <input type="hidden" name="type" value="student"/>
+                    学号（不可修改）：
                     <input readonly="readonly" placeholder="学号" type="text" name="username" value="{{ student.stu_num }}"/>
+                    姓名（不可修改）：
                     <input readonly="readonly" placeholder="姓名" type="text" name="name" value="{{ student.name }}"/>
+                    性别：
                     <select name="gender">
                         <option value="">请选择性别</option>
 			            <option value="1" {% ifequal student.gender 1 %}selected="selected"{% endifequal %}>男</option>
                         <option value="2" {% ifequal student.gender 2 %}selected="selected"{% endifequal %}>女</option>
     	            </select>
-                    <input placeholder="密码" type="password" name="password" value="{{ student.name }}" >
-                    <input placeholder="重复密码" type="password" name="re_password" value="{{ student.name }}">
+                    密码：
+                    <input placeholder="如果不修改请留空" type="password" name="password">
+                    重复密码：
+                    <input placeholder="重复密码" type="password" name="re_password">
+                    所属学院：
                     <select name="college" value="请选择学院">
                         <option selected="selected" value="{{ student.college }}">{{ student.college }}</option>
                         <option value="蒙古学学院">蒙古学学院</option>
@@ -80,10 +86,15 @@
                         <option value="体育教学部">体育教学部</option>
                         <option value="预科">预科</option>
     	            </select>
+                    联系电话：
                     <input placeholder="电话" type="text" name="phone" value="{{ student.phone }}">
+                    微信：
                     <input placeholder="微信" type="text" name="weixin" value="{{ student.weixin }}">
+                    QQ：
                     <input placeholder="QQ" type="text" name="qq" value="{{ student.qq }}">
+                    工作地点：
                     <input placeholder="工作地点" type="text" name="work_location" value="{{ student.work_location }}">
+                    工作性质：
                     <input placeholder="工作性质" type="text" name="work_character" value="{{ student.work_character }}">
 				</form>
 			</div>
