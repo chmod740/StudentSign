@@ -45,8 +45,8 @@
 			<div class="input_form">
 				<form id="register_form" method="post" onkeypress="if(event.keyCode==13||event.which==13){ register();}">
                     <input type="hidden" name="type" value="student"/>
-                    <input placeholder="学号" type="text" name="username" value="{{ student.stu_num }}"/>
-                    <input placeholder="姓名" type="text" name="name" value="{{ student.name }}"/>
+                    <input readonly="readonly" placeholder="学号" type="text" name="username" value="{{ student.stu_num }}"/>
+                    <input readonly="readonly" placeholder="姓名" type="text" name="name" value="{{ student.name }}"/>
                     <select name="gender">
                         <option value="">请选择性别</option>
 			            <option value="1" {% ifequal student.gender 1 %}selected="selected"{% endifequal %}>男</option>

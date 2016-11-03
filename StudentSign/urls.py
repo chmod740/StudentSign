@@ -16,7 +16,7 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from django.views.static import serve
-from web.views import login, logout, index, register, student, teacher, sign_in, sign_off
+from web.views import login, logout, index, register, student, teacher, sign_in, sign_off, change_teacher_info, change_student_info
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,6 +28,8 @@ urlpatterns = [
     url(r'^teacher.html', teacher),
     url(r'^sign_in.html', sign_in),
     url(r'^sign_off.html', sign_off),
-    url('^$', index),
+    url(r'^$', index),
+    url(r'^change_student_info.html', change_student_info),
+    url(r'^change_teacher_info.html', change_teacher_info),
     url(r'^static/(?P<path>.*)$', serve, {'document_root': '/home/ubuntu/py-web/StudentSign/static'})
 ]
